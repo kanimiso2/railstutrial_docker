@@ -69,9 +69,33 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_not is_logged_in?
     assert_response :see_other
     assert_redirected_to root_url
+
+    delete logout_path
     follow_redirect!
     assert_select "a[href=?]", login_path
     assert_select "a[href=?]", logout_path,      count: 0
     assert_select "a[href=?]", user_path(@user), count: 0
   end
+
+  test "login with remembering" do
+    log_in_as(@user, remember_me: '1')
+    #assert_not cookies[:remember_token].blank?
+    # クッキーに保存された remember_token を確認
+  puts "Cookie remember_token: #{cookies['remember_token']}"
+  puts "User remember_token: #{assigns(:user).remember_token}"
+  #user.authenticated?(cookies[:remember_token])
+  # クッキーの remember_token とユーザーの remember_token が一致することを確認
+  assert_equal cookies[:remember_token], assigns(:user).remember_token
+  end
+
+  test "login without remembering" do
+    # Cookieを保存してログイン
+    log_in_as(@user, remember_me: '1')
+    #puts(cookies[:remember_token])
+    # Cookieが削除されていることを検証してからログイン
+    log_in_as(@user, remember_me: '0')
+    #puts(cookies[:remember_token])
+    assert cookies[:remember_token].blank?
+  end
+
 end
