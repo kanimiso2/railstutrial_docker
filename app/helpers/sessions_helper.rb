@@ -23,6 +23,11 @@ module SessionsHelper
           
         end
     end
+    # 渡されたユーザーがカレントユーザーであればtrueを返す
+    def current_user?(user)
+        user && user == current_user
+    end
+
     #current_userメソッド呼び出して確認
     def logged_in?
         !current_user.nil?
@@ -45,4 +50,9 @@ module SessionsHelper
         cookies.permanent.encrypted[:user_id] = user.id
         cookies.permanent[:remember_token] = user.remember_token
     end
+
+    def store_location
+        session[:forwarding_url] = request.original_url if request.get?
+    end
+
 end
