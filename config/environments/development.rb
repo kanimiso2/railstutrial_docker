@@ -1,6 +1,11 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  #mail設定
+  config.action_mailer.raise_delivery_errors = false
+  host = 'localhost:3000' # 自分のポート番号に応じて変更
+  config.action_mailer.default_url_options = { host: host, protocol: 'http' }
+  
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
