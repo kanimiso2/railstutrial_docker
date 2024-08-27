@@ -1,21 +1,7 @@
 require "test_helper"
 
 class UsersIndexTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
-  # def setup
-  #   @user = users(:michael)
-  # end
-  # test "index including pagination" do
-  #   log_in_as(@user)
-  #   get users_path
-  #   assert_template 'users/index'
-  #   assert_select 'div.pagination',count:2
-  #   User.paginate(page: 1).each do |user|
-  #     assert_select 'a[href=?]', user_path(user), text: user.name
-  #   end
-  # end
+  
   def setup
     @admin     = users(:michael)
     @non_admin = users(:archer)
@@ -26,7 +12,7 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     get users_path
     assert_template 'users/index'
     assert_select 'div.pagination'
-    first_page_of_users = User.paginate(page: 1)
+    first_page_of_users = User.where(activated: true).paginate(page: 1)
     first_page_of_users.each do |user|
       assert_select 'a[href=?]', user_path(user), text: user.name
       unless user == @admin
@@ -44,5 +30,15 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     log_in_as(@non_admin)
     get users_path
     assert_select 'a', text: 'delete', count: 0
+  end
+
+  test "should display only activated users" do
+    log_in_as(@admin)
+    get users_path
+    User.paginate(page: 1).first.toggle!(:activated)
+    get users_path 
+    assigns(:users).each do |user|
+      assert user.activated
+    end
   end
 end

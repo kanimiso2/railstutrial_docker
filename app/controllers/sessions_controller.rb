@@ -4,7 +4,8 @@ class SessionsController < ApplicationController
 
   def create
     @user = User.find_by(email: params[:session][:email].downcase)
-    if @user && @user.authenticate(params[:session][:password])
+    #@user && @user.authenticate(params[:session][:password])
+    if @user &.authenticate(params[:session][:password])
       # forwarding_url = session[:forwarding_url]
       # #session固定攻撃対策
       # reset_session
