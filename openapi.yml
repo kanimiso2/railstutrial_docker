@@ -136,7 +136,7 @@ paths:
           required: true
           schema:
             type: integer
-            example: 1
+            example: The ID of the micropost to like
       responses:
         "302":
           description: Redirect after liking a micropost
@@ -146,7 +146,6 @@ paths:
               schema:
                 type: string
                 example: "/microposts/1"
-
   /likes/{micropost_id}/delete:
     delete:
       summary: Unlike a micropost
@@ -156,7 +155,7 @@ paths:
           required: true
           schema:
             type: integer
-            example: 1
+            example:  The ID of the micropost to unlike
       responses:
         "302":
           description: Redirect after unliking a micropost
@@ -169,43 +168,36 @@ paths:
 
   /users:
     get:
-      summary: Get list of users
+      summary: List all users
       responses:
         "200":
           description: A list of users
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
     post:
-      summary: Create a user
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: "Example User"
-                email:
-                  type: string
-                  example: "user@example.com"
-                password:
-                  type: string
-                  example: "password"
+      summary: Create a new user
       responses:
-        "302":
-          description: Redirect after user creation
-          headers:
-            Location:
-              description: Redirect URL after user creation
-              schema:
-                type: string
-                example: "/users/1"
-
+        "201":
+          description: User created successfully
+  /users/new:
+    get:
+      summary: New user registration form
+      responses:
+        "200":
+          description: New user registration form
+          
+  /users/{id}/edit:
+    get:
+      summary: Edit user form
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: The ID of the user to edit
+            example: The ID of the user to edit
+      responses:
+        "200":
+          description: Edit user form
   /users/{id}:
     get:
       summary: Get user details
@@ -215,7 +207,8 @@ paths:
           required: true
           schema:
             type: integer
-            example: 1
+            description: The ID of the user to retrieve details for
+            example: The ID of the user to retrieve details for
       responses:
         "200":
           description: User details
@@ -223,37 +216,58 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-
-  /users/{id}/following:
-    get:
-      summary: Get list of users that the specified user is following
+    patch:
+      summary: Update a user
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
-            example: 1
+            description: The ID of the user to update
+            example: The ID of the user to update
       responses:
         "200":
-          description: A list of following users
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
+          description: User updated successfully
+    delete:
+      summary: Delete a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: The ID of the user to delete
+            example: The ID of the user to delete
+      responses:
+        "204":
+          description: User deleted successfully
+  /users/{id}/following:
+    get:
+      summary: Get the list of users the user is following
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: The ID of the user whose following list is to be retrieved
+            example: The ID of the user whose following list is to be retrieved
+      responses:
+        "200":
+          description: A list of followed users
 
   /users/{id}/followers:
     get:
-      summary: Get list of followers for the specified user
+      summary: Get a list of followers for the specified user
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            example: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: The ID of the user whose followers are to be retrieved
+          example: The ID of the user whose followers are to be retrieved
       responses:
         "200":
           description: A list of followers
@@ -262,7 +276,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/User"
+
 
   /account_activations/{token}/edit:
     get:
@@ -385,7 +400,7 @@ paths:
           required: true
           schema:
             type: integer
-            example: 1
+            example: The ID of the micropost to delete
       responses:
         "302":
           description: Redirect after micropost deletion
@@ -407,7 +422,8 @@ paths:
               properties:
                 followed_id:
                   type: integer
-                  example: 1
+                  description: The ID of the user to follow
+                  example: The ID of the user to follow
       responses:
         "302":
           description: Redirect after following a user
@@ -426,7 +442,7 @@ paths:
           required: true
           schema:
             type: integer
-            example: 1
+            example: The ID of the user to unfollow
       responses:
         "302":
           description: Redirect after unfollowing a user
