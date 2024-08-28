@@ -1,0 +1,600 @@
+
+openapi: 3.0.3
+servers:
+  - url:  https://api.example.com/{version}
+    description: Produce servers
+    variables:
+      version:
+        description: API version
+        default: v1
+  - url:  https://dev.example.com/{version}
+    description: Develop servers
+    variables:
+      version:
+        description: API version
+        default: v1
+  - url: http://localhost:4010
+    description: Local mock server
+info:
+  title: RailsAppAPI
+  version: 1.0.0
+paths:
+  /:
+    get:
+      summary: Home page
+      responses:
+        "200":
+          description: Home page response
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<html>...</html>"
+
+  /help:
+    get:
+      summary: Help page
+      responses:
+        "200":
+          description: Help page response
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<html>...</html>"
+
+  /about:
+    get:
+      summary: About page
+      responses:
+        "200":
+          description: About page response
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<html>...</html>"
+
+  /contact:
+    get:
+      summary: Contact page
+      responses:
+        "200":
+          description: Contact page response
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<html>...</html>"
+
+  /signup:
+    get:
+      summary: Sign up page
+      responses:
+        "200":
+          description: Sign up page response
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<html>...</html>"
+
+  /login:
+    get:
+      summary: Login page
+      responses:
+        "200":
+          description: Login page response
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<html>...</html>"
+    post:
+      summary: Log in a user
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "user@example.com"
+                password:
+                  type: string
+                  example: "password"
+      responses:
+        "302":
+          description: Redirect after login
+          headers:
+            Location:
+              description: Redirect URL after login
+              schema:
+                type: string
+                example: "/users/1"
+
+  /logout:
+    delete:
+      summary: Log out a user
+      responses:
+        "302":
+          description: Redirect after logout
+          headers:
+            Location:
+              description: Redirect URL after logout
+              schema:
+                type: string
+                example: "/"
+
+  /likes/{micropost_id}/create:
+    post:
+      summary: Like a micropost
+      parameters:
+        - name: micropost_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "302":
+          description: Redirect after liking a micropost
+          headers:
+            Location:
+              description: Redirect URL after liking
+              schema:
+                type: string
+                example: "/microposts/1"
+
+  /likes/{micropost_id}/delete:
+    delete:
+      summary: Unlike a micropost
+      parameters:
+        - name: micropost_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "302":
+          description: Redirect after unliking a micropost
+          headers:
+            Location:
+              description: Redirect URL after unliking
+              schema:
+                type: string
+                example: "/microposts/1"
+
+  /users:
+    get:
+      summary: Get list of users
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      summary: Create a user
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Example User"
+                email:
+                  type: string
+                  example: "user@example.com"
+                password:
+                  type: string
+                  example: "password"
+      responses:
+        "302":
+          description: Redirect after user creation
+          headers:
+            Location:
+              description: Redirect URL after user creation
+              schema:
+                type: string
+                example: "/users/1"
+
+  /users/{id}:
+    get:
+      summary: Get user details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /users/{id}/following:
+    get:
+      summary: Get list of users that the specified user is following
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: A list of following users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+  /users/{id}/followers:
+    get:
+      summary: Get list of followers for the specified user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: A list of followers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+  /account_activations/{token}/edit:
+    get:
+      summary: Activate a user's account
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "activation_token"
+      responses:
+        "302":
+          description: Redirect after account activation
+          headers:
+            Location:
+              description: Redirect URL after account activation
+              schema:
+                type: string
+                example: "/users/1"
+
+  /password_resets:
+    post:
+      summary: Send password reset instructions
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "user@example.com"
+      responses:
+        "302":
+          description: Redirect after sending reset instructions
+          headers:
+            Location:
+              description: Redirect URL after sending instructions
+              schema:
+                type: string
+                example: "/"
+
+  /password_resets/{token}/edit:
+    get:
+      summary: Show the password reset form
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "reset_token"
+      responses:
+        "200":
+          description: Password reset form
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<html>...</html>"
+
+  /password_resets/{token}:
+    patch:
+      summary: Reset the password
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "reset_token"
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: "newpassword"
+      responses:
+        "302":
+          description: Redirect after password reset
+          headers:
+            Location:
+              description: Redirect URL after password reset
+              schema:
+                type: string
+                example: "/login"
+
+  /microposts:
+    post:
+      summary: Create a new micropost
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  example: "This is a new micropost"
+      responses:
+        "302":
+          description: Redirect after micropost creation
+          headers:
+            Location:
+              description: Redirect URL after creation
+              schema:
+                type: string
+                example: "/"
+
+  /microposts/{id}:
+    delete:
+      summary: Delete a micropost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "302":
+          description: Redirect after micropost deletion
+          headers:
+            Location:
+              description: Redirect URL after deletion
+              schema:
+                type: string
+                example: "/"
+
+  /relationships:
+    post:
+      summary: Follow a user
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                followed_id:
+                  type: integer
+                  example: 1
+      responses:
+        "302":
+          description: Redirect after following a user
+          headers:
+            Location:
+              description: Redirect URL after
+              schema:
+                type: string
+                example: "/users/1/followers"
+  /relationships/{id}:
+    delete:
+      summary: Unfollow a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "302":
+          description: Redirect after unfollowing a user
+          headers:
+            Location:
+              description: Redirect URL after unfollowing
+              schema:
+                type: string
+                example: "/users/1/followers"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Example User"
+        email:
+          type: string
+          example: "user@example.com"
+        activated:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+          example: "2023-08-28T12:34:56Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2023-08-28T12:34:56Z"
+
+    Micropost:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        content:
+          type: string
+          example: "This is a micropost content"
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: "2023-08-28T12:34:56Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2023-08-28T12:34:56Z"
+
+    Relationship:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        follower_id:
+          type: integer
+          format: int64
+          example: 1
+        followed_id:
+          type: integer
+          format: int64
+          example: 2
+        created_at:
+          type: string
+          format: date-time
+          example: "2023-08-28T12:34:56Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2023-08-28T12:34:56Z"
+
+    Like:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        micropost_id:
+          type: integer
+          format: int64
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: "2023-08-28T12:34:56Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2023-08-28T12:34:56Z"
+# openapi: 3.0.3
+# servers:
+#   - url:  https://api.example.com/{version}
+#     description: Produce servers
+#     variables:
+#       version:
+#         description: API version
+#         default: v1
+#   - url:  https://dev.example.com/{version}
+#     description: Develop servers
+#     variables:
+#       version:
+#         description: API version
+#         default: v1
+#   - url: http://localhost:4010
+#     description: Local mock server
+# info:
+#   title: newsapi
+#   version: 1.0.0
+# paths:
+#   /articles:
+#     get:
+#       summary: Get articles
+#       responses:
+#         "200":
+#           description: OK
+#           content:
+#             application/json:
+#               schema:
+#                 type: array
+#                 items:
+#                   $ref: "#/components/schemas/Article"
+#   /articles/{id}:
+#     get:
+#       summary: IDで記事を取得
+#       parameters:
+#       - name: id
+#         in: path
+#         required: true
+#         schema:
+#           type: integer
+#           format: int64
+#       responses:
+#         "200":
+#           description: OK
+#           content:
+#             application/json:
+#               schema:
+#                 $ref: "#/components/schemas/Article"
+# components:
+#     schemas:
+#       Article: 
+#         type: object
+#         properties:
+#           id:
+#             type: integer
+#             format: int64
+#             example: 1
+#           title:
+#             type: string
+#             example: title
+#           content:
+#             type: string
+#             example: hello components
