@@ -44,6 +44,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_27_084428) do
     t.integer "micropost_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["micropost_id"], name: "index_likes_on_micropost_id"
+    t.index ["user_id", "micropost_id"], name: "index_likes_on_user_id_and_micropost_id", unique: true
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "microposts", charset: "utf8mb4", force: :cascade do |t|

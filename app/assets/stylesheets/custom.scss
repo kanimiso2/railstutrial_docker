@@ -304,3 +304,17 @@ span.image {
     border: 0;
   }
 }
+/*いいね機能*/
+/* Apply hover effect to the filled heart icon (unlike link) */
+.unlike-link:hover .bi-heart-fill {
+  color: #777273; /* Change color on hover */
+  transform: scale(1.2); /* Slightly increase size on hover */
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Apply hover effect to the outlined heart icon (like link) */
+.like-link:hover .bi-heart {
+  color: #e01bb6; /* Change color on hover */
+  transform: scale(1.2); /* Slightly increase size on hover */
+  transition: transform 0.2s ease-in-out;
+}

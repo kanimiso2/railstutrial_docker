@@ -6,6 +6,22 @@
       <%= image_tag micropost.image.variant(:display) %>
     <% end %>
    </span>
+   <span class="niceifix">
+  <% if current_user && micropost %>
+    <% if Like.find_by(user_id: current_user.id, micropost_id: micropost.id) %>
+      <%= link_to delete_like_url(micropost.id), data: { "turbo-method": :delete }, class: "unlike-link", title: "いいねを消す" do %>
+        <i class="bi bi-heart-fill text-danger"></i>
+      <% end %>
+    <% else %>
+      <%= link_to create_like_url(micropost.id), data: { "turbo-method": :post }, class: "like-link", title: "いいね！" do %>
+        <i class="bi bi-heart text-secondary"></i>
+      <% end %>
+    <% end %>
+    <%= pluralize(Like.where(micropost_id: micropost.id).count, "like") %>
+  <% else %>
+    <p>ユーザーまたはマイクロポストが見つかりません</p>
+  <% end %>
+</span>
   <span class="timestamp">
     Posted <%= time_ago_in_words(micropost.created_at) %> ago.
     <% if current_user?(micropost.user) %>

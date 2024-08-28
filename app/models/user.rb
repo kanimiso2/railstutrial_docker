@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+    has_many :likes, dependent: :destroy
+    has_many :liked_microposts, through: :likes, source: :micropost
     has_many :microposts ,dependent: :destroy 
     has_many :active_relationships, class_name:  "Relationship",
                                   foreign_key: "follower_id",
@@ -119,6 +121,14 @@ class User < ApplicationRecord
                      .includes(:user, image_attachment: :blob)
   end
 
+  #いいね機能
+  def like(micropost)
+    likes.create(micropost_id: micropost.id)
+  end
+
+  def unlike(micropost)
+    likes.find_by(micropost_id:micropost.id).destroy
+  end
     
 
     private

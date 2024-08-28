@@ -2,8 +2,8 @@
 
 one:
   user_id: 1
-  pmicropost_id: 1
+  micropost_id: 1
 
 two:
-  user_id: 1
-  pmicropost_id: 1
+  user_id: 2
+  micropost_id: 1

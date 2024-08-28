@@ -6,5 +6,9 @@ class CreateLikes < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+    # インデックスの追加
+    add_index :likes, :user_id
+    add_index :likes, :micropost_id
+    add_index :likes, [:user_id, :micropost_id], unique: true
   end
 end
