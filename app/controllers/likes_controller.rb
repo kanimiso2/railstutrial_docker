@@ -4,12 +4,24 @@ class LikesController < ApplicationController
         @micropost = Micropost.find(params[:micropost_id])
         current_user.like(@micropost)
         flash[:success] = "いいねしました！"
-        redirect_to root_url
+        if request.referrer.nil?
+            redirect_to root_url
+        else
+            redirect_to request.referrer
+        end
+        #redirect_back(fallback_location: root_url)
+        #redirect_to root_url
     end
     def destroy
         @micropost = Micropost.find(params[:micropost_id])
         current_user.unlike(@micropost)
         flash[:success] = "いいねを解除しました！"
-        redirect_to root_url
-      end
+        if request.referrer.nil?
+            redirect_to root_url, status: :see_other
+        else
+            redirect_to request.referrer, status: :see_other
+        end
+        #redirect_back(fallback_location: root_url)
+        #redirect_to root_url
+    end
 end
