@@ -1,5 +1,5 @@
 class MicropostsController < ApplicationController
-    before_action :logged_in_user, only: [:create, :destroy]
+    before_action :logged_in_user, only: [:create, :destroy,:show]
     before_action :correct_user,   only: :destroy
 
     def create
@@ -7,7 +7,11 @@ class MicropostsController < ApplicationController
         @micropost.image.attach(params[:micropost][:image])
         if @micropost.save
             flash[:success] = "Micropost created!"
-        redirect_to root_url
+            if @micropost.parent_post_id
+                redirect_to micropost_path(@micropost.parent_post_id)
+            else
+                redirect_to root_url
+            end
         else
             @feed_items = current_user.feed.paginate(page: params[:page])
             render 'static_pages/home', status: :unprocessable_entity
@@ -24,10 +28,47 @@ class MicropostsController < ApplicationController
         end
     end
 
+    def show
+        @micropost = Micropost.find_by(id: params[:id])
+        if @micropost
+            @reply = current_user.microposts.build(parent_post_id: @micropost.id)
+            @feed_items = Micropost.where("parent_post_id = ?", @micropost.id).paginate(page: params[:page])
+        else
+            flash[:danger] = "Micropost not found"
+            redirect_to root_url
+        end
+    end
+
+    def most_liked
+        @micropost = Micropost.find_by(id: params[:id]) 
+        if @micropost
+            @reply = current_user.microposts.build(parent_post_id: @micropost.id)
+            @feed_items = Micropost
+                .most_liked(@micropost.id)
+                .paginate(page: params[:page])
+            render "show"
+        else
+            flash[:danger] = "Micropost not found"
+            redirect_to root_url
+        end
+    end
+    
+    def newest
+        @micropost = Micropost.find_by(id: params[:id])
+        if @micropost
+            @reply = current_user.microposts.build(parent_post_id: @micropost.id)
+            @feed_items = Micropost.where("parent_post_id = ?", @micropost.id).paginate(page: params[:page])
+            render "show"
+        else
+            flash[:danger] = "Micropost not found"
+            redirect_to root_url
+        end
+    end
+
     private
 
     def micropost_params
-        params.require(:micropost).permit(:content,:image)
+        params.require(:micropost).permit(:content,:image,:parent_post_id)
     end
 
     def correct_user

@@ -51,6 +51,11 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
     color: #777;
   }
+
+  h3{
+    font-size: 2em;
+    text-align: center;
+  }
   
   p {
     font-size: 1.1em;
@@ -305,6 +310,12 @@ span.image {
   }
 }
 /*いいね機能*/
+.actions .bi-heart {
+  margin-left: 10px
+}
+.actions .bi-heart-fill{
+  margin-left: 10px
+}
 /* Apply hover effect to the filled heart icon (unlike link) */
 .unlike-link:hover .bi-heart-fill {
   color: #777273; /* Change color on hover */
@@ -318,3 +329,26 @@ span.image {
   transform: scale(1.2); /* Slightly increase size on hover */
   transition: transform 0.2s ease-in-out;
 }
+
+
+//micropost-reply
+.micropost-hover:hover {
+  background-color: #f0f0f0; /* 任意の色 */
+  cursor: pointer; /* クリック可能であることを示す */
+}
+
+//reply sort toggle
+.sort-options {
+  position: relative;
+}
+.sort-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sort-menu a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+}
+

@@ -1,9 +1,7 @@
 require "test_helper"
 
 class MicropostsControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+
   def setup
     @micropost = microposts(:orange)
   end
@@ -32,5 +30,24 @@ class MicropostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :see_other
     assert_redirected_to root_url
   end
-  
+
+  test "should get show" do
+    @user = users(:michael)
+    log_in_as(@user)
+    get micropost_path(@micropost)
+    assert_response :success
+  end
+  test "should get most_liked" do
+    @user = users(:michael)
+    log_in_as(@user)
+    get most_liked_micropost_path(@micropost)
+    assert_response :success
+  end
+  test "should get newest" do
+    @user = users(:michael)
+    log_in_as(@user)
+    get newest_micropost_path(@micropost)
+    assert_response :success
+  end
+
 end

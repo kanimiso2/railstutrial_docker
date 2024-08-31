@@ -1,0 +1,24 @@
+<h1>Micropost</h1>
+<div class="col-md-12">     
+  <ol class="microposts">
+    <%= render @micropost %>
+  </ol>
+   <%= render 'shared/micropost_reply_form', micropost: @reply %>
+   <%if @feed_items.any?%>
+   <h3>Reply</h3>
+   <div class="sort-options">
+    <a href="#" id="sort-toggle" class="dropdown-toggle">
+        返信を並び替え <b class="caret"></b>
+    </a>
+    <div id="sort-menu" class="sort-menu collapse">
+        
+        <ul>
+        <li><a href="<%= newest_micropost_path(@micropost) %>" id="sort-newest">新着順</a></li>
+        <li><a href="<%= most_liked_micropost_path(@micropost) %>" id="sort-liked">いいねが多い順</a></li>
+        </ul>
+    </div>
+    </div>
+    <% end %>
+
+   <%= render 'shared/feed' %>
+</div>
