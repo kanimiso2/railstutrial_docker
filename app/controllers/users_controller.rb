@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:edit, :update,:index,:destroy,:following, :followers]
+  before_action :logged_in_user, only: [:edit, :update,:index,:destroy,:following, :followers,:search]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user, only: :destroy 
   def index
+    @title = "All users"
     @users = User.where(activated: true).paginate(page: params[:page])
   end
 
@@ -58,6 +59,13 @@ class UsersController < ApplicationController
     render 'show_follow'
   end
 
+  def search
+    @title = "Search users"
+    @users = User.where('name LIKE ?', "%#{params[:query]}%")
+               .where(activated: true)
+               .paginate(page: params[:page])
+    render 'index'
+  end
 
   private
 

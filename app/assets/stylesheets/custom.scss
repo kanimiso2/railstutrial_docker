@@ -352,3 +352,29 @@ span.image {
   text-decoration: none;
 }
 
+//検索
+.search-container h4 {
+  text-align: right; /* テキストを右寄せ */
+  padding-right: 150px; /* テキストの右側にスペースを追加 */
+  margin: 0; /* 余分なマージンをリセット（必要に応じて調整） */
+}
+
+.search-form-container {
+  text-align: right; /* コンテナ内の要素を右寄せ */
+  margin-bottom: 20px; /* 下にスペースを追加（必要に応じて調整） */
+}
+
+.search-form {
+  overflow: auto; /* オーバーフロー処理 */
+  margin: 10px; /* マージンの設定 */
+  float: right; /* 右寄せ */
+}
+
+.input-group {
+  display: flex; /* フレックスボックスを適用 */
+  align-items: center; /* アイテムを縦方向に中央揃え */
+}
+
+.form-control {
+  width: 250px; /* テキストフィールドの幅を設定 */
+}

@@ -1,10 +1,22 @@
-<% provide(:title, 'All users') %>
-<h1>All users</h1>
+<% provide(:title, @title) %>
+<h1><%= @title %></h1>
 
-<%= will_paginate %>
-
-<ul class="users">
-  <%= render @users %>
-</ul>
-
-<%= will_paginate %>
+<div class="search-container">
+  <h4>User Search</h4>
+  <%= form_with url: search_users_path, method: :get, class: 'search-form' do |form| %>
+    <div class="input-group">
+      <%= form.text_field :query, value: params[:query], placeholder: 'Search by name', class: 'form-control' %>
+      <button type="submit" class="btn btn-outline-secondary">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  <% end %>
+  </div>
+</div>
+<div class="container">
+  <%= will_paginate %>
+    <ul class="users">
+      <%= render @users %>
+    </ul>
+  <%= will_paginate %>
+</div>
