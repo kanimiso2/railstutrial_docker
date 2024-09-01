@@ -2,9 +2,12 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:edit, :update,:index,:destroy,:following, :followers,:search]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user, only: :destroy 
+  before_action :check_blocked_user, only: [:show]
+  before_action :check_blocked_user_redirect, only: [:following, :followers]
+  
   def index
     @title = "All users"
-    @users = User.where(activated: true).paginate(page: params[:page])
+    @users = User.where(activated: true).where.not(id: blockers_user_ids).paginate(page: params[:page])
   end
 
   def show 
@@ -63,6 +66,7 @@ class UsersController < ApplicationController
     @title = "Search users"
     @users = User.where('name LIKE ?', "%#{params[:query]}%")
                .where(activated: true)
+               .where.not(id: blockers_user_ids)
                .paginate(page: params[:page])
     render 'index'
   end
@@ -85,5 +89,23 @@ class UsersController < ApplicationController
     def admin_user
       redirect_to(root_url,status: :see_other) unless current_user.admin?
     end
-
+    # ユーザーがブロックされているかどうかを確認
+    def check_blocked_user
+      if current_user.blocked_by?(User.find(params[:id]))
+        flash.now[:danger] = "You have been blocked by this user."
+      end
+      # if current_user.nil? 
+      #   # 例えば、エラーメッセージを表示する、リダイレクトするなどの処理
+      #   redirect_to root_url
+      # elsif current_user.blocked_by?(User.find(params[:id]))
+      #   redirect_to root_url
+      # end
+    end
+    def check_blocked_user_redirect
+      if current_user.blocked_by?(User.find(params[:id]))
+        flash.now[:danger] = "You have been blocked by this user."
+        @user = User.find(params[:id])
+        redirect_to user_path(@user)
+      end
+    end
 end

@@ -1,4 +1,10 @@
 class User < ApplicationRecord
+    has_many :active_blocks,class_name:"Block",
+                            foreign_key: "blocker_id",
+                            dependent: :destroy
+    has_many :passive_blocks,class_name: "Block",
+                            foreign_key: "blocked_id",
+                            dependent: :destroy
     has_many :likes, dependent: :destroy
     has_many :liked_microposts, through: :likes, source: :micropost
     has_many :microposts ,dependent: :destroy 
@@ -9,6 +15,8 @@ class User < ApplicationRecord
                                   foreign_key: "followed_id",
                                   dependent:   :destroy
 
+    has_many :blocking,through: :active_blocks,source: :blocked
+    has_many :blockers,through: :passive_blocks,source: :blocker
     has_many :following, through: :active_relationships, source: :followed
     has_many :followers, through: :passive_relationships, source: :follower
     attr_accessor :remember_token ,:activation_token,:reset_token
@@ -93,42 +101,62 @@ class User < ApplicationRecord
         reset_sent_at < 2.hours.ago
     end
 
-    def feed
-        Micropost.where("user_id = ?", id)
-    end
+    # def feed
+    #     Micropost.where("user_id = ?", id)
+    # end
 
     # ユーザーをフォローする
-  def follow(other_user)
-    following << other_user unless self == other_user
-  end
+    def follow(other_user)
+        following << other_user unless self == other_user
+    end
 
-  # ユーザーをフォロー解除する
-  def unfollow(other_user)
-    following.delete(other_user)
-  end
+    # ユーザーをフォロー解除する
+    def unfollow(other_user)
+        following.delete(other_user)
+    end
 
-  # 現在のユーザーが他のユーザーをフォローしていればtrueを返す
-  def following?(other_user)
-    following.include?(other_user)
-  end
+    # 現在のユーザーが他のユーザーをフォローしていればtrueを返す
+    def following?(other_user)
+        following.include?(other_user)
+    end
 
-   # ユーザーのステータスフィードを返す
-  def feed
-    following_ids = "SELECT followed_id FROM relationships
-                     WHERE  follower_id = :user_id"
-    Micropost.where("user_id IN (#{following_ids})
-                     OR user_id = :user_id", user_id: id)
-                     .includes(:user, image_attachment: :blob)
-  end
+    # ユーザーのステータスフィードを返す
+    def feed(blockers_user_ids = [])
+        following_ids = "SELECT followed_id FROM relationships
+                        WHERE  follower_id = :user_id"
+        Micropost.where("user_id IN (#{following_ids})
+                         OR user_id = :user_id", user_id: id)
+                        .where.not(user_id: blockers_user_ids)
+                        .includes(:user, image_attachment: :blob)
+    end
 
-  #いいね機能
-  def like(micropost)
-    likes.create(micropost_id: micropost.id)
-  end
+    #いいね機能
+    def like(micropost)
+        likes.create(micropost_id: micropost.id)
+    end
 
-  def unlike(micropost)
-    likes.find_by(micropost_id:micropost.id).destroy
-  end
+    def unlike(micropost)
+        likes.find_by(micropost_id:micropost.id).destroy
+    end
+
+     # ユーザーをブロックする
+    def block(other_user)
+        blocking << other_user unless blocked?(other_user) || self == other_user
+    end
+
+    # ユーザーのブロックを解除する
+    def unblock(other_user)
+        blocking.delete(other_user)
+    end
+
+    # 現在のユーザーが他のユーザーをブロックしていればtrueを返す
+    def blocked?(other_user)
+        blocking.include?(other_user)
+    end
+    # 他のユーザーが現在のユーザーをブロックしていればtrueを返す
+    def blocked_by?(other_user)
+        blockers.include?(other_user)
+    end
     
 
     private

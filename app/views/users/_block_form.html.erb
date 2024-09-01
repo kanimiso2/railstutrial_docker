@@ -1,0 +1,7 @@
+<% unless current_user == @user %>
+  <% if current_user.blocked?(@user) %>
+    <%= button_to 'Unblock', block_path(@user), method: :delete, class: 'btn btn-secondary block-button' %>
+  <% else %>
+    <%= button_to 'Block', blocks_path(blocked_id: @user.id), method: :post, class: 'btn btn-danger block-button' %>
+  <% end %>
+<% end %>

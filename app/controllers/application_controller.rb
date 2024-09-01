@@ -9,6 +9,9 @@ class ApplicationController < ActionController::Base
           redirect_to login_url, status: :see_other
         end
     end
-    
+    # 現在のユーザーがブロックしているユーザーのIDを取得
+    def blockers_user_ids
+        current_user.blockers.pluck(:id)
+    end
 
 end

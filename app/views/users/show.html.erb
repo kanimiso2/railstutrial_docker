@@ -4,14 +4,18 @@
     <section class="user_info">
       <h1>
         <%= gravatar_for @user %>
-        <%= @user.name %>
+        <%= @user.name %>      
       </h1>
+      <%= render 'block_form' if logged_in? %>
     </section>
     <section class="stats">
       <%= render 'shared/stats' %>
     </section>
   </aside>
   <div class="col-md-8">
+  <% if current_user.blocked_by?(@user) %>
+  <p>You are blocked by this user and cannot interact with their content.</p>
+  <% else %>
   <%= render 'follow_form' if logged_in? %>
     <% if @user.microposts.any? %>
       <h3>Microposts (<%= @user.microposts.count %>)</h3>
@@ -19,6 +23,7 @@
         <%= render @microposts %>
       </ol>
       <%= will_paginate @microposts %>
+    <% end %>
     <% end %>
   </div>
 </div>
