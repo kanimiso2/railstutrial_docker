@@ -1,0 +1,13 @@
+<div id="chat_messages">
+  <% @chat_messages.each do |chat_message| %>
+    <div class="chat-message <%= 'own-message' if chat_message.user == current_user %>">
+      <div class="chat-message-header <%= 'own-message-header' if chat_message.user == current_user %>">
+        <%= gravatar_for(chat_message.user, size: 50) %>
+      </div>
+      <div class="chat-message-body">
+        <strong><%= chat_message.user.name %>:</strong>
+        <p><%= chat_message.message %></p>
+      </div>
+    </div>
+  <% end %>
+</div>

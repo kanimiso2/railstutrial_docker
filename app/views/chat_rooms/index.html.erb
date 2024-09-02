@@ -1,0 +1,18 @@
+<h1>Chat Rooms</h1>
+
+<ul>
+  <% @chat_rooms.each do |chat_room| %>
+    <% # 相手ユーザーを取得 %>
+    <% other_user = chat_room.users.where.not(id: current_user.id).first %>
+    <ol>
+      <div class="chat-room-item">
+        <% if other_user %>
+          <%= gravatar_for(other_user, size: 50, class: "chat-room-avatar") %>
+          <%= link_to other_user.name, chat_room %>
+        <% else %>
+          <%= link_to "Unknown", chat_room %> <!-- 相手が見つからない場合の処理 -->
+        <% end %>
+      </div>
+    </ol>
+  <% end %>
+</ul>

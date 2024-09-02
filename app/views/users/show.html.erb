@@ -6,7 +6,15 @@
         <%= gravatar_for @user %>
         <%= @user.name %>      
       </h1>
-      <%= render 'block_form' if logged_in? %>
+      <!--# <%= render 'block_form' if logged_in? %>
+      # <%= render 'chat_room_form' if logged_in? %> -->
+      
+      <% if logged_in? %>
+        <div class="forms-container">
+          <%= render 'block_form' %>
+          <%= render 'chat_room_form' %>
+        </div>
+      <% end %>
     </section>
     <section class="stats">
       <%= render 'shared/stats' %>

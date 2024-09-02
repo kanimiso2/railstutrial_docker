@@ -1,0 +1,16 @@
+<h1><%= @other_user.present? ? @other_user.name : "Unknown User" %></h1>
+
+<%= render 'chat_messages' %>
+<div class="chat-form-container">
+<%= form_with(model: @chat_message,url: chat_room_chat_messages_path(@chat_room) ,class: 'chat-form rounded-left') do |form| %>
+    <div class="input-group">
+      <%= form.text_area :message, placeholder: 'Type your message...', class: 'form-control' %>
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-primary">
+        <i class="bi bi-send"></i>
+      </button>
+      </div>
+    </div>
+<% end %>
+</div>
+  

@@ -1,0 +1,6 @@
+<% unless current_user == @user %>
+    <%= form_with(url: chat_rooms_path, method: :post, local: true) do |f| %>
+        <%= hidden_field_tag :user_id, @user.id %>
+        <%= f.submit "DM", class: "btn btn-primary block-button" %>
+    <% end %>
+<% end %>

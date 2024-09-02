@@ -11,7 +11,9 @@
 /* universal */
 
 body{
-    padding-top :60px
+    padding-top :60px;
+    height: 100%;
+    margin: 0;
 }
 
 section{
@@ -382,4 +384,82 @@ span.image {
 /* app/assets/stylesheets/custom.css */
 .block-button {
   margin-top: 20px;
+}
+
+
+/* app/assets/stylesheets/custom.css */
+.forms-container {
+  display: flex;
+  gap: 10px; /* フォーム間のスペースを設定 */
+}
+
+.block-button,
+.dm-button {
+  margin-top: 20px;
+}
+
+
+
+/* Form and button styles */
+.chat-form .input-group {
+  display: flex;
+  align-items: center;
+}
+.chat-form .form-control {
+  border-radius: 20px 0 0 20px; /* Round the corners of the text area */
+  height:40px;
+}
+
+.chat-form .btn-primary {
+  border-radius: 0 20px 20px 0;/* Round the corners of the button */
+  padding: 0.5rem 1.7rem; /* ボタンのパディングを調整 */
+  font-size: 2rem; /* ボタンのフォントサイズを調整 */
+}
+
+
+
+
+
+
+
+/* app/assets/stylesheets/application.css */
+.chat-message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.own-message {
+  justify-content: flex-end;
+}
+
+.chat-message-header {
+  margin-right: 10px;
+}
+
+.own-message-header {
+  margin-left: 10px;
+}
+
+.chat-message-body {
+  max-width: 70%;
+}
+
+.own-message-body {
+  background-color: #e0f7fa; /* 自分のメッセージの背景色 */
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.chat-message-body {
+  background-color: #f1f1f1; /* 他のユーザーのメッセージの背景色 */
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.chat-room-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0; 
 }

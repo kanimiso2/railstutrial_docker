@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+    has_many :chat_rooms_users
+    has_many :chat_rooms, through: :chat_rooms_users
     has_many :active_blocks,class_name:"Block",
                             foreign_key: "blocker_id",
                             dependent: :destroy
